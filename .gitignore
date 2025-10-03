@@ -48,6 +48,7 @@ frontend/coverage/
 *.swp
 *.swo
 *~
+.github/
 .DS_Store
 Thumbs.db
 
