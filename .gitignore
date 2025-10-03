@@ -167,3 +167,7 @@ pnpm-lock.yaml
 .cursor/
 .agents/
 .specify/
+/backend/composer.lock
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

@@ -113,7 +113,8 @@ run_dev() {
 # Function to display interactive menu
 show_menu() {
     echo "Laravel React Starter"
-    info "options:"
+    echo ""
+    info "Available OPTIONS:"
     echo ""
     echo "  1. install (composer and node dependencies)"
     echo "  2. migrate (database migration and backup)"
@@ -124,9 +125,9 @@ show_menu() {
     echo "  7. optimize (php artisan optimize & clear)"
     echo "  8. deploy (run deploy to vercel server etc)"
     echo "  9. repair (fix composer and node problems)"
-    echo "  0. quit (ctrl + q)"
+    echo "  0. quit (ctrl + q to exit)"
     echo ""
-    read -p "$(prompt "option (0-9): ")" choice
+    read -p "$(prompt "select option(0-9): ")" choice
     echo ""
 
     case $choice in

@@ -3,7 +3,6 @@ set -euo pipefail  # Exit on any error
 # Initial setup script for React-Laravel Starter Kit
 # Usage: ./setup.sh [--force-pm-select]
 
-set -e  # Exit on any error
 
 # Source common functions and variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -149,20 +148,38 @@ if [ "$run_migrations" = "y" ] || [ "$run_migrations" = "Y" ]; then
         read -p "$(prompt "Enter name for admin user: ")" admin_name
 
         echo "Creating admin user..."
-        if php artisan tinker <<EOF
-\$user = new App\Models\User;
-\$user->name = "$admin_name";
-\$user->email = "$admin_email";
-\$user->password = Hash::make("$admin_password");
-\$user->email_verified_at = now();
-\$user->save();
-echo "Admin user created successfully with email: $admin_email";
+        # Create a temporary PHP script to avoid bash variable expansion issues
+        temp_php_script=$(mktemp)
+        cat > "$temp_php_script" << 'EOF'
+<?php
+require_once 'vendor/autoload.php';
+
+$app = require_once 'bootstrap/app.php';
+$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
+try {
+    $user = new App\Models\User;
+    $user->name = getenv('ADMIN_NAME');
+    $user->email = getenv('ADMIN_EMAIL');
+    $user->password = Hash::make(getenv('ADMIN_PASSWORD'));
+    $user->email_verified_at = now();
+    $user->save();
+    echo "Admin user created successfully with email: " . getenv('ADMIN_EMAIL') . "\n";
+} catch (Exception $e) {
+    echo "Error creating admin user: " . $e->getMessage() . "\n";
+    exit(1);
+}
 EOF
-        then
+
+        # Set environment variables and run the script
+        if ADMIN_NAME="$admin_name" ADMIN_EMAIL="$admin_email" ADMIN_PASSWORD="$admin_password" php "$temp_php_script"; then
             success "Admin user created successfully!"
         else
             error "Failed to create admin user. You can create one manually later with 'php artisan tinker'."
         fi
+
+        # Clean up temporary file
+        rm -f "$temp_php_script"
     fi
 else
     warning "Skipping migrations. You can run 'php artisan migrate' later from the backend directory."
@@ -209,16 +226,3 @@ echo ""
 
 # Final instructions
 success "Setup complete!"
-echo ""
-echo "Next steps:"
-echo "  1. Edit backend/.env with your database credentials if you haven't already"
-echo "  2. Start the backend: cd backend && php artisan serve"
-echo "  3. Start the frontend: cd frontend && npm run dev (or pnpm dev)"
-echo "  4. Open your browser to the URLs shown by the servers"
-echo ""
-echo "Useful commands:"
-echo "  - Backend: php artisan migrate (if you skipped migrations)"
-echo "  - Frontend: npx shadcn@latest add <component> (to add UI components)"
-echo "  - Build frontend: npm run build (or pnpm build)"
-echo ""
-echo "Happy coding!"

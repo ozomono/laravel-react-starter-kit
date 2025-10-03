@@ -4,7 +4,6 @@ set -euo pipefail  # Exit on any error
 # Usage: ./update.sh [--composer] [--backend] [--frontend]
 # Default: updates all (composer in backend, node in frontend and backend)
 
-set -e  # Exit on any error
 
 # Source common functions and variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -202,10 +201,4 @@ elif [ "$UPDATE_FRONTEND" = true ]; then
     echo "  ✅ Node.js dependencies in frontend"
 fi
 
-echo ""
-echo "Next steps:"
-echo "  - Test your application to ensure everything works correctly"
-echo "  - Run database migrations if needed: cd backend && php artisan migrate"
-echo "  - Restart your development servers if they're running"
-echo ""
-echo "Happy coding!"
+success "Setup complete!"

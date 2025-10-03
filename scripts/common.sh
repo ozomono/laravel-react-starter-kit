@@ -3,6 +3,9 @@ set -euo pipefail  # Exit on any error
 # Common functions and utilities for React-Laravel Starter Kit scripts
 # This file should be sourced by other scripts, not executed directly
 
+readonly VERSION="1.0.0"
+readonly NODE_PACKET_MANAGER=""
+
 # Color codes for output
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
@@ -10,6 +13,7 @@ readonly YELLOW='\033[1;33m'
 readonly BLUE='\033[0;34m'
 readonly CYAN='\033[0;36m'
 readonly NC='\033[0m' # No Color
+
 
 # Helper functions for colored output
 error() {
@@ -38,12 +42,7 @@ confirm_action() {
     local default_yes="${2:-false}"
 
     if [ "$default_yes" = true ]; then
-        read -p "$message (Y/n): " -n 1 -r
-        echo
-        [[ ! $REPLY =~ ^[Nn]$ ]]
-    else
-        read -p "$message (y/N): " -n 1 -r
-        echo
+        read -p "$message (Y/n): " -n 1 -r NODE_PACKET_MANAGER
         [[ $REPLY =~ ^[Yy]$ ]]
     fi
 }
@@ -147,9 +146,9 @@ detect_project_package_manager() {
     IFS=' ' read -ra available_managers <<< "$available_managers_string"
 
     # Check for environment variable (highest priority)
-    if [ -n "$REACT_LARAVEL_PM" ]; then
-        if echo "$available_managers_string" | grep -q "\b$REACT_LARAVEL_PM\b"; then
-            echo "$REACT_LARAVEL_PM"
+    if [ -n "$NODE_PACKET_MANAGER" ]; then
+        if echo "$available_managers_string" | grep -q "\b$NODE_PACKET_MANAGER\b"; then
+            echo "$NODE_PACKET_MANAGER"
             return 0
         fi
     fi
@@ -205,7 +204,7 @@ get_package_manager() {
     local detected_pm=$(detect_project_package_manager)
     if [ -n "$detected_pm" ] && [ "$force_interactive" != true ]; then
         # Output informational message to stderr so it doesn't interfere with return value
-        if [ -n "$REACT_LARAVEL_PM" ]; then
+        if [ -n "$NODE_PACKET_MANAGER" ]; then
             echo "Using package manager from environment: $detected_pm" >&2
         elif [ -n "$(load_selected_package_manager)" ]; then
             echo "Using saved package manager preference: $detected_pm" >&2
