@@ -154,20 +154,69 @@ docker-compose.override.yml
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+./backend/composer.lock
+./backend/yarn.lock
+./backend/pnpm-lock.yaml
+./frontend/package-lock.json
+./frontend/yarn.lock
+./frontend/pnpm-lock.yaml
 
 # Build artifacts
 *.tar.gz
 *.zip
 *.rar
+*.7z
+*.bak
 
 # workspace localhost folder
-.notes/
+*notes/
 .workspace/
 .vscode/
 .cursor/
 .agents/
 .specify/
-/backend/composer.lock
+.codacy/
+.notes/CHANGELOG.md
+.notes/IDEAS.md
+.notes/TODO.md
+.notes/RESEARCH.md
+.notes/BUGS.md
+.notes/FEATURES.md
+.notes/ARCHIVE.md
+.notes/DEPRECATED.md
+.notes/EXPLORE.md
+.notes/INSPIRATION.md
+.notes/RESOURCES.md
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
+.agents/AGENT-*.md
+.agents/AGENT-README.md
+.agents/AGENT-CONFIG.md
+.agents/AGENT-TEMPLATE.md
+.agents/AGENT-EXAMPLES.md
+.agents/AGENT-GUIDELINES.md
+.agents/AGENT-BEST-PRACTICES.md
+.agents/AGENT-CHECKLIST.md
+
+AGENT.md
+AGENTS.md
+README.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+LICENSE.md
+SECURITY.md
+SUPPORT.md
+NOTICES.md
+CHANGELOG.md
+ROADMAP.md
+
+# backups folders
+.backup/
+./backend/.backup
+./frontend/.backup
+*/backup/*
+
+# temp folder
+.temp/
+uploads/
